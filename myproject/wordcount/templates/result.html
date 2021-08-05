@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+</head>
+<body>
+    <h1>입력하신 글은 <span style="color:red">{{ wordlength }}</span> 개의 단어로 이루어져있습니다!</h1>
+    <hr>
+    <h1>단어별 사용횟수</h1>
+    <!-- for 문 사용해서 나열하기 -->
+    {% for word,count in word_dic.items %}
+    {{ word }} : {{ count }}번
+    <br>
+    {% endfor %}
+</body>
+</html>
