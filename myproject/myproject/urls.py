@@ -26,4 +26,6 @@ urlpatterns = [
     path("result/", wordcount.views.result, name="result"),
     path("blog/", blogApp.views.bloghome, name="bloghome"),
     path("blogdetail/<int:blog_id>", blogApp.views.blogdetail, name="blogdetail"),
+    path("createnew/", blogApp.views.createnew, name="createnew"),
+    path("newpost/", blogApp.views.newpost, name="newpost"),
 ]

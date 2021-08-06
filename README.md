@@ -248,3 +248,42 @@ def blogdetail(request, blog_id):
     return render(request, "blogdetail.html", {"post": post})
 
 ```
+
+### new post 작성하기
+
+#### form문은 반드시 csrf보안을 설정해줘야한다 `csrf_token`
+
+```python
+    <form action="{% url 'createnew' %}" method="POST">
+        {% csrf_token %}
+        <h2>제목</h2>
+        <input type="text" name="title" required><br>
+        <h2>내용</h2>
+        <textarea name="body" id="" cols="30" rows="10" required></textarea><br>
+        <input type="submit" value="작성하기">
+    </form>
+```
+
+#### redirect 사용과 str() 사용
+
+```python
+return redirect("/blogdetail/" + str(post.id))
+
+```
+
+#### model 생성
+
+```python
+def createnew(request):
+    if request.method == "POST":
+        post = Blog() # 객체생성 왜 new 연산자를 안쓰는가 ?? 클래슨데!!
+        post.title = request.POST["title"]
+        post.body = request.POST["body"]
+        post.write_date = timezone.localtime()
+        post.modify_date = timezone.localtime()
+        post.save() # 저장
+
+        return redirect("/blogdetail/" + str(post.id))
+
+
+```

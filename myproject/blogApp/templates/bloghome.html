@@ -6,22 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
         body{
             display: flex;
             flex-direction: column;
             align-items: center;
+            font-family: 'Gowun Dodum', sans-serif;
         }
         h1,h2,h3,h4,h5,h6{
             text-align: center;
         }
+        h2{
+            transition: all 300ms;
+        }
+        a{
+            text-decoration: none;
+            
+        }
+        a:visited{
+            color: rgb(41, 41, 41);
+        }
+        h2:hover{
+            transform: scale(1.05);
+        }
+
     </style>
 </head>
 <body>
     <h1>Blog HOME</h1>
+    <a href="{% url 'newpost' %}">새글 작성</a>
     {% for post in posts %}
     <div>
         <h2><a href="{% url 'blogdetail' post.id %}"> {{post.title}}</a></h2>
-        <h5>{{post.body}}</h5>
+        <h5>{{post.shortcut}}</h5>
         작성일 : {{post.write_date}}
         <br>
         수정일 : {{post.modify_date}}
