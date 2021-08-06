@@ -17,10 +17,13 @@ from django.contrib import admin
 from django.urls import path
 import helloworld.views
 import wordcount.views
+import blogApp.views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', helloworld.views.helloworld,name='home'),
-    path('wordcount/', wordcount.views.wordcount,name='wordcount'),
-    path('result/', wordcount.views.result,name='result'),
+    path("admin/", admin.site.urls),
+    path("", helloworld.views.helloworld, name="home"),
+    path("wordcount/", wordcount.views.wordcount, name="wordcount"),
+    path("result/", wordcount.views.result, name="result"),
+    path("blog/", blogApp.views.bloghome, name="bloghome"),
+    path("blogdetail/<int:blog_id>", blogApp.views.blogdetail, name="blogdetail"),
 ]

@@ -155,3 +155,96 @@ def result(request):
         request, "result.html", {"wordlength": len(wordlist), "word_dic": word_dic}
     )
 ```
+
+## Blog를 활용한 DB사용하기 (model)
+
+### 한국시간으로 바꾸기
+
+- settings.py
+
+```python
+LANGUAGE_CODE = 'ko-kr' #해도되고 안해도되고
+TIME_ZONE = "Asia/Seoul"
+```
+
+### Django의 시간처리 패키지
+
+```python
+from datetime import datetime
+from django.utils import timezone
+```
+
+#### datetime 패키지
+
+```python
+from datetime import datetime
+
+datetime.now()
+# 결과: datetime.datetime(2020, 10, 28, 0, 33, 21, 553440)
+```
+
+#### imezone 패키지
+
+```python
+from django.utils import timezone
+
+timezone.now()
+# 결과: datetime.datetime(2020, 10, 27, 15, 34, 16, 677327, tzinfo=<UTC>)
+
+timezone.localtime()
+# 결과: datetime.datetime(2020, 10, 28, 0, 34, 23, 350281, tzinfo=<DstTzInfo 'Asia/Seoul' KST+9:00:00 STD>)
+```
+
+### auto_now_add, auto_now
+
+- 보통 모델에서 생성, 수정 시간을 기록하기 위해 아래와 같이 `auto_now_add와` `auto_now를` 사용한다. 이렇게 하면 해당 컬럼이 생성, 수정되었을 때 시간이 자동으로 기록된다.
+
+```python
+models.DateTimeField(auto_now_add=True)
+models.DateTimeField(auto_now=True)
+```
+
+### model 의 id
+
+- detail 페이지를 만들기위해서는 해당 글의 `id`값을 가져와서 불러와야된다.
+- django model에서는 특별이 `pk`나 `id` 를 지정해주지않으면 자동으로 `.id`로 포함된다
+
+```python
+id = models.AutoField(primary_key=True, **옵션 )
+```
+
+### template 언어로 pram 넘기기
+
+#### html
+
+```html
+<body>
+  <h1>Blog HOME</h1>
+  {% for post in posts %}
+  <div>
+    <h2><a href="{% url 'blogdetail' post.id %}"> {{post.title}}</a></h2>
+    <h5>{{post.body}}</h5>
+    작성일 : {{post.write_date}}
+    <br />
+    수정일 : {{post.modify_date}}
+    <hr />
+  </div>
+  {% endfor %}
+</body>
+```
+
+#### urls.py
+
+```python
+    path("blogdetail/<int:blog_id>", blogApp.views.blogdetail, name="blogdetail"),
+```
+
+#### views.py
+
+```python
+def blogdetail(request, blog_id):
+    post = get_object_or_404(Blog, pk=blog_id)
+    print(post)
+    return render(request, "blogdetail.html", {"post": post})
+
+```
