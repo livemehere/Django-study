@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+        h1,h2,h3,h4,h5,h6{
+            text-align: center;
+        }
+        h2{
+            transition: all 300ms;
+        }
+        a{
+            text-decoration: none;
+            
+        }
+        a:visited{
+            color: rgb(41, 41, 41);
+        }
+        h2:hover{
+            transform: scale(1.05);
+        }
+        .container{
+            width: 80%;
+            background-color: rgb(231, 231, 231);
+        }
+        form{
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+
+    </style>
+</head>
+<body>
+{% block content %}
+{% endblock %}
+</body>
+</html>

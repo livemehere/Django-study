@@ -287,3 +287,83 @@ def createnew(request):
 
 
 ```
+
+## static file
+
+### 단순히 앱 단위로 사용할 경우
+
+- app 폴더에서 static 폴더를 만들어서 넣는다. 끝
+- html에서 아래와 같이 불러와주고, 사용하면 끝
+
+```html
+{% load static %}
+<img src="{% static 'spiderman.jpeg' %}" alt="" />
+<img src="{% static 'iron.jpg' %}" alt="" />
+```
+
+> 원래는 STATICFILES_DIRS, STATIC_ROOT 도 설정을 했었는데, 도데체 settings.py에서 등록하는 것들이 어떻게 동작하는지 궁금해서 이것저것 실험을 해보니 결론은 STATIC_URL = "/static/" 기본적으로 적혀있는 이문장하나가 app내에서든 project단에서든 존재하는 static 파일을 읽을수 있도록 해주는것 같다. 그래서 별도의 설정없이 static 파일만만들어서 정적파일을 관리하면 앱과 앱사이에서의 static파일도 로드가 가능하다. 하지만 배포하기에는 한곳에 모아야 되기때문에 적합하지 않다는 생각이든다. 그래서 정적파일을 한데 모아주는 명령어를 사용하던지, 에초에 project단에서 static 파일들을 모아서 관리하든지 하면된다. 만약 앱단에서 각각 static 파일을 관리하고있다면 아래의 설정과 명령어를 사용하면된다
+
+> STATIC_URL = "/static/" 은 "/photo1.png" 를 "/media/photo1.png" 게 생략할수있도록 해준다
+
+```python
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'portfolio', 'static') # 각 앱마다의 static 폴더위치 배열에 등록
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') # 한곳에 모을 static 폴더 위치지정
+```
+
+```bash
+python manage.py collectstatic
+```
+
+## media file (추후 다시..)
+
+- static vs media : 개발자가 준비한파일 vs 사용자가 업로드하는 파일
+
+```python
+# settings.py
+MEDIA_URL = "/media/" # 각 media파일에 접근할 때 접두사(prefix)의 역할을 하게 됩니다
+MEDIA_ROOT = os.path.join(BASE_DIR, "media") #실제로 파일이 저장되는 경로를 설정하는 값
+```
+
+## template extends (상속)
+
+- html을 작성하다보면 nav바와 같은 고정적인 부분들이있는데 이것들을 일일이 작성하게 되면 나중에 유지보수도 어렵고 작성도 어렵다
+- 그래서 템플릿엔진에서는 상속을지원한다.
+- 아래 3개를 활용하면된다. 활용법은 생략
+
+```
+{% extends 'base.html' %}
+{% block content %}
+{% endblock %}
+```
+
+## urls.py 분리
+
+- 앱이 많아질수록 url은 많아지고, 한곳에서 관리한다면 해깔린다.
+- 앱마다 urls.py를 만들고, import 구분 수정후 프로젝트 urls.py 는 다음과 같이 수정해준다
+
+### blog 예시 ,blog/로 시작하는 url은 blogApp 앱의 urls.py로 넘긴다!
+
+```python
+    path("blog/", include("blogApp.urls")),
+```
+
+### blogApp 에 새로 만든 urls.py
+
+```python
+from django.urls import path
+from . import views
+
+
+urlpatterns = [
+    path("", views.bloghome, name="bloghome"),
+    path("blogdetail/<int:blog_id>", views.blogdetail, name="blogdetail"),
+    path("createnew/", views.createnew, name="createnew"),
+    path("newpost/", views.newpost, name="newpost"),
+]
+
+```
+
+- 이렇게하면 모든 url은 모두 blog로 시작하고 뒤에 추가적으로 붙는다.
